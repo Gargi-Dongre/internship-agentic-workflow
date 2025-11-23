@@ -153,4 +153,5 @@ Write file → Upload to Drive → Update Sheet → Mark PROCESSED**
 ## 🏁 Conclusion
 The **Internship Automation Hub** is a fully automated agentic AI workflow for internship applications.  
 It integrates multiple LLM agents, Google services, and custom tools to deliver a practical, time-saving system that enhances job search efficiency and demonstrates strong automation engineering.
+<img width="1393" height="595" alt="Screenshot 2025-11-23 at 12 49 02 PM" src="https://github.com/user-attachments/assets/eaebbc32-4df1-414c-a157-3c36717335ac" />
 
