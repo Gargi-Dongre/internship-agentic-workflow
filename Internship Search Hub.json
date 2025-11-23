@@ -1,0 +1,2128 @@
+{
+  "name": "Internship Search Hub",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -240,
+        -96
+      ],
+      "id": "6926e22a-0a52-4488-98ff-3352ad83a44d",
+      "name": "Get Jobs",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KyFlBXtwlJnLhmqZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        -80
+      ],
+      "id": "8640b5ad-9f87-4fd8-9675-eb9cb461b2ee",
+      "name": "Trigger on new row added",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "fb5hYlSAMcEbVsc3",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ca0b24c-db4e-493e-af90-66013e272b03",
+              "name": "job_url",
+              "value": "={{$json[\"JOB_URL\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "107e2a9e-8ff2-4823-95ef-0a81efe2c724",
+              "name": "company",
+              "value": "={{$json[\"COMPANY\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "b669e4b3-2290-49a7-8096-9e41b87fbf8f",
+              "name": "raw_title",
+              "value": "={{$json[\"RAW_JOB_TITLE\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "7c20ec48-43ec-40dd-92d6-6cdb7d106a42",
+              "name": "raw_description",
+              "value": "={{$json[\"RAW_JOB_DESCRIPTION\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "4ca7074d-c3bc-4172-a3bb-eea129b0b360",
+              "name": "row_number",
+              "value": "={{$json[\"row_number\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -32,
+        -96
+      ],
+      "id": "3b4386d5-a3eb-4a58-b116-05093ca0a501",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        224,
+        80
+      ],
+      "id": "b978d11e-7385-4e2f-8d53-2ac588a7cb34",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "nvtbKXrl5YK4WxMm",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3cbad7fd-7e76-4e13-b8cf-c37637b95a89",
+              "leftValue": "={{$json[\"PROCESSED\"]}}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -448,
+        -80
+      ],
+      "id": "3a3b6a7c-f382-4732-a351-7c1ecbad67b5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{$json[\"row_number\"]}}\n",
+            "PARSED_TITLE": "={{$json[\"parsed_title\"]}}",
+            "ROLE_CATEGORY": "={{$json[\"role_category\"]}}",
+            "WORK_TYPE": "={{$json[\"work_type\"]}}",
+            "SENIORITY": "={{$json[\"seniority\"]}}",
+            "TECH_STACK": "={{JSON.stringify($json[\"tech_stack\"])}}",
+            "KEY_SKILLS": "={{JSON.stringify($json[\"key_skills\"])}}",
+            "MATCH_SCORE": "={{$json[\"match_score\"]}}",
+            "LAST_UPDATED": "={{new Date().toISOString()}}",
+            "PROCESSED": "\"In Process\""
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "JOB_ID",
+              "displayName": "JOB_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "JOB_URL",
+              "displayName": "JOB_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COMPANY",
+              "displayName": "COMPANY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_TITLE",
+              "displayName": "RAW_JOB_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_DESCRIPTION",
+              "displayName": "RAW_JOB_DESCRIPTION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATE_ADDED",
+              "displayName": "DATE_ADDED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PARSED_TITLE",
+              "displayName": "PARSED_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LOCATION",
+              "displayName": "LOCATION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WORK_TYPE",
+              "displayName": "WORK_TYPE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SENIORITY",
+              "displayName": "SENIORITY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ROLE_CATEGORY",
+              "displayName": "ROLE_CATEGORY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "TECH_STACK",
+              "displayName": "TECH_STACK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "KEY_SKILLS",
+              "displayName": "KEY_SKILLS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MATCH_SCORE",
+              "displayName": "MATCH_SCORE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "STRATERGY_VERSION",
+              "displayName": "STRATERGY_VERSION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TAILORING_COMPLETE",
+              "displayName": "TAILORING_COMPLETE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RESUME_FILE",
+              "displayName": "RESUME_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COVER_LETTER_FILE",
+              "displayName": "COVER_LETTER_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "OUTREACH_MESSAGE_FILE",
+              "displayName": "OUTREACH_MESSAGE_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LAST_UPDATED",
+              "displayName": "LAST_UPDATED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "NOTES",
+              "displayName": "NOTES",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PROCESSED",
+              "displayName": "PROCESSED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        720,
+        -96
+      ],
+      "id": "d72d37a9-f1de-4c15-b110-12dd4f139753",
+      "name": "Update rowswith parsed data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KyFlBXtwlJnLhmqZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileSelector": "/Users/gargidongre/Documents/PromptEng/Assignment5/agentic-job-application-system/Resume/GargiDongre-Resumee.pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        320
+      ],
+      "id": "ebb286c5-77a1-481c-93a6-418733529211",
+      "name": "Read Resume From Disk",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        320
+      ],
+      "id": "731b66e3-f69c-4dd4-9fa6-ee8e562950bd",
+      "name": "Extract Resume data to JSON"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7edf3ff9-a625-40c7-b32d-baa0b9bb4209",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        320
+      ],
+      "id": "bcbe2a43-d8c7-4348-98ed-2752f5ebe28e",
+      "name": "ResumeText"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        544,
+        496
+      ],
+      "id": "8f49e1ea-f65e-44e4-922a-6dd0052fc8dc",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "nvtbKXrl5YK4WxMm",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// 1. Parse LLM output (which comes in as a JSON string)\nlet rawText = $json.text || \"\";\nlet raw = {};\n\ntry {\n    raw = JSON.parse(rawText);\n} catch (e) {\n    // If LLM messed up JSON, avoid breaking the workflow\n    return {\n        json: {\n            error: \"Failed to parse LLM JSON\",\n            raw_text: rawText\n        }\n    };\n}\n\n// --- Clean Skills ---------------------------------------------------\n\nlet flatSkills = new Set();   // use Set for auto-dedup\n\nif (Array.isArray(raw.skills)) {\n    raw.skills.forEach(skillLine => {\n\n        if (typeof skillLine !== \"string\") return;\n\n        // Example:\n        // \"Programming & Query Languages: Python, SQL (Microsoft & Oracle), Java\"\n        const parts = skillLine.split(\":\");\n\n        // If \":\" exists → ignore category (left) and use right side\n        let skillSection = parts.length > 1 ? parts.slice(1).join(\":\") : skillLine;\n\n        // Split by commas, parentheses, or semicolons\n        let tokens = skillSection.split(/[,();]/).map(s => s.trim());\n\n        // Add clean tokens\n        tokens.forEach(token => {\n            if (token && token.length > 1) {\n                flatSkills.add(token);\n            }\n        });\n    });\n}\n\n// Convert Set → Array\nflatSkills = Array.from(flatSkills);\n\n\n// 3. Clean projects\nlet cleanedProjects = [];\nif (Array.isArray(raw.projects)) {\n    cleanedProjects = raw.projects.map(p => ({\n        name: p.name || \"\",\n        description: p.description || \"\",\n        technologies: p.technologies || \"\",\n        period: p.period || \"\"\n    }));\n}\n\n// 4. Clean education\nlet cleanedEducation = [];\nif (Array.isArray(raw.education)) {\n    cleanedEducation = raw.education.map(e => ({\n        institution: e.institution || \"\",\n        degree: e.degree || \"\",\n        gpa: e.gpa || \"\",\n        period: e.period || \"\",\n        courses: e.courses || \"\"\n    }));\n}\n\n// 5. Return final cleaned JSON\nreturn {\n    json: {\n        name: raw.name || \"\",\n        email: raw.email || \"\",\n        phone: raw.phone || \"\",\n        location: raw.location || \"\",\n        summary: raw.summary || \"\",\n        skills: flatSkills,\n        projects: cleanedProjects,\n        experience_years: raw.experience_years || \"\",\n        education: cleanedEducation\n    }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        320
+      ],
+      "id": "040a77a2-66b1-4759-9ec5-9a94e8552bba",
+      "name": "Resume_in_JSON"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Parse the JSON that LLM returned inside the \"text\" field\nlet llm;\ntry {\n    llm = JSON.parse($json.text);\n} catch (e) {\n    throw new Error(\"Invalid JSON in LLM text: \" + $json.text);\n}\n\n// Your real skills\nconst mySkills = [\n  \"python\", \"sql\", \"spark\", \"azure\", \"snowflake\",\n  \"databricks\", \"etl\", \"pipelines\", \"airflow\",\n  \"hadoop\", \"kafka\", \"tableau\", \"powerbi\"\n];\n\n// Normalize\nconst requiredStack = (llm.tech_stack || []).map(s => s.toLowerCase());\nconst mySkillsLower = mySkills.map(s => s.toLowerCase());\n\n// Count overlap using partial match\nlet matches = 0;\nfor (const skill of requiredStack) {\n    if (mySkillsLower.some(s => skill.includes(s))) {\n        matches++;\n    }\n}\n\n// Compute match score\nlet matchScore = 0;\nif (requiredStack.length > 0) {\n\tmatchScore = Math.round((matches / requiredStack.length) * 100);\n}\n\n// Return FINAL parsed item + score\nreturn {\n\tjson: {\n\t\t...llm,\n\t\tmatch_score: matchScore\n\t}\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        -96
+      ],
+      "id": "132623da-1b5d-490d-be85-8f7918ecc51f",
+      "name": "Match Score"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Extract all merged items\nconst items = $input.all();\n\n// 2. Last item is always resume (based on your merge output)\nconst resume = items[items.length - 1].json;\n\n// 3. All other items are job rows\nconst jobItems = items.slice(0, -1);\n\n// 4. Prepare result array\nconst results = [];\n\n// 5. Normalize resume skills\nconst resumeSkills = (resume.skills || []).map(s => s.toLowerCase());\n\n// 6. Loop through each job and compute match score\nfor (const jobItem of jobItems) {\n  const job = jobItem.json;\n\n  // Parse TECH_STACK + KEY_SKILLS (they arrive as strings)\n  let tech = [];\n  let key = [];\n\n  try { tech = JSON.parse(job.TECH_STACK || \"[]\"); } catch {}\n  try { key = JSON.parse(job.KEY_SKILLS || \"[]\"); } catch {}\n\n  const jobSkills = [...tech, ...key].map(s => s.toLowerCase());\n\n  // Match count\n  let matches = 0;\n  for (const skill of jobSkills) {\n    if (resumeSkills.some(r => r.includes(skill) || skill.includes(r))) {\n      matches++;\n    }\n  }\n\n  const score = jobSkills.length\n    ? Math.round((matches / jobSkills.length) * 100)\n    : 0;\n\n  // Push result for this job\n  results.push({\n    json: {\n      row_number: job.row_number,\n      match_score: score\n    }\n  });\n}\n\n// 7. Return the array of results (one per job)\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        112
+      ],
+      "id": "6de5c8da-7717-4d2e-b5d9-36963e9af810",
+      "name": "NewMatchScore"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "PROCESSED",
+              "lookupValue": "=\"In Process\""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        -96
+      ],
+      "id": "4bd4e632-66c2-402b-a7be-faeea2783e75",
+      "name": "Get row(s) in sheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KyFlBXtwlJnLhmqZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        816,
+        208
+      ],
+      "id": "0df24bff-833a-426f-9225-07c2c9cc56fe",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{$json[\"row_number\"]}}\n",
+            "MATCH_SCORE": "={{$json[\"match_score\"]}}",
+            "PROCESSED": "\"Yes\"",
+            "LAST_UPDATED": "={{$now}}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "JOB_ID",
+              "displayName": "JOB_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "JOB_URL",
+              "displayName": "JOB_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COMPANY",
+              "displayName": "COMPANY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_TITLE",
+              "displayName": "RAW_JOB_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_DESCRIPTION",
+              "displayName": "RAW_JOB_DESCRIPTION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATE_ADDED",
+              "displayName": "DATE_ADDED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PARSED_TITLE",
+              "displayName": "PARSED_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LOCATION",
+              "displayName": "LOCATION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WORK_TYPE",
+              "displayName": "WORK_TYPE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SENIORITY",
+              "displayName": "SENIORITY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROLE_CATEGORY",
+              "displayName": "ROLE_CATEGORY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TECH_STACK",
+              "displayName": "TECH_STACK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "KEY_SKILLS",
+              "displayName": "KEY_SKILLS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "MATCH_SCORE",
+              "displayName": "MATCH_SCORE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "STRATERGY_VERSION",
+              "displayName": "STRATERGY_VERSION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TAILORING_COMPLETE",
+              "displayName": "TAILORING_COMPLETE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RESUME_FILE",
+              "displayName": "RESUME_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COVER_LETTER_FILE",
+              "displayName": "COVER_LETTER_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "OUTREACH_MESSAGE_FILE",
+              "displayName": "OUTREACH_MESSAGE_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LAST_UPDATED",
+              "displayName": "LAST_UPDATED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "NOTES",
+              "displayName": "NOTES",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PROCESSED",
+              "displayName": "PROCESSED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1408,
+        112
+      ],
+      "id": "8d9c9e75-7043-4b49-ac3f-f25f2de8d10a",
+      "name": "UpdateMatchScore",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KyFlBXtwlJnLhmqZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// All merged items from previous node\nconst items = $input.all();\n\n// Last item = resume JSON\nconst resume = items[items.length - 1].json;\n\n// All earlier items = job rows\nconst jobItems = items.slice(0, -1);\n\n// Build new output array: one item per job with resume attached\nconst output = [];\n\nfor (const jobItem of jobItems) {\n  output.push({\n    json: {\n      job: jobItem.json,\n      resume: resume\n    }\n  });\n}\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        352
+      ],
+      "id": "0549ffaa-ea59-481c-ace5-e3cb9121955d",
+      "name": "Prepare Tailoring Items"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        528
+      ],
+      "id": "bf8cb717-19ea-4ad3-88e7-b2114c2301bf",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "nvtbKXrl5YK4WxMm",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract structured metadata from the following job posting.\n\nRaw Title: {{$json[\"raw_title\"]}}\nDescription:\n{{$json[\"raw_description\"]}}\nRow Number: {{$json[\"row_number\"]}}\n\nReturn STRICT JSON with the following fields:\n\n{\n  \"row_number\": {{$json[\"row_number\"]}},\n  \"parsed_title\": \"\",\n  \"location\": \"\",\n  \"work_type\": \"Remote | Hybrid | Onsite\",\n  \"seniority\": \"Intern | Junior | Mid | Senior\",\n  \"role_category\": \"Data Engineer | Analytics | BI | ML | Other\",\n  \"tech_stack\": [],\n  \"key_skills\": []\n}\n\nReturn ONLY JSON.\n",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a job parsing agent. Always return valid JSON with no additional text."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        208,
+        -96
+      ],
+      "id": "d70b02bd-daa9-44f5-bc38-728fa33defbf",
+      "name": "Basic LLM Chain - Job"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "=You are a Resume Parsing Agent.  \nExtract structured data from the provided resume text.\n\nRESUME TEXT:\n{{ $json.text}}\n\nReturn ONLY valid JSON.\nNo markdown.\nNo code fences.\nNo backticks.\nNo explanations.\nNo extra text.\n\nJSON FORMAT TO RETURN:\n{\n  \"name\": \"\",\n  \"email\": \"\",\n  \"phone\": \"\",\n  \"location\": \"\",\n  \"summary\": \"\",\n  \"skills\": [],\n  \"projects\": [],\n  \"experience_years\": \"\",\n  \"education\": []\n}\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        176,
+        320
+      ],
+      "id": "784e82d4-6c6c-4f0c-91c7-c419bafc1492",
+      "name": "Basic LLM Chain - Resume"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert resume strategist specializing in ATS optimization,\nBig Tech recruiting, and precision job-specific tailoring. Your task\nis to transform the candidate’s real resume to match each job’s\nrequirements WITHOUT fabricating any experience.\n\nYou are given:\n\nJOB DATA (ONE job per item):\n{{ JSON.stringify($json.job, null, 2) }}\n\nCANDIDATE RESUME (SAME for all jobs):\n{{ JSON.stringify($json.resume, null, 2) }}\n\n---\n\n### YOUR OBJECTIVE\nFor EACH job, generate a tailored resume section that aligns the candidate’s\nreal experience with the job’s requirements — using only truthful data.\n\n---\n\n### YOUR TASKS\n\n1. **tailored_summary (3–4 lines max)**\n   - Focus on technical impact and job-relevant strengths\n   - Use keywords found in the job description (Python, SQL, Spark,\n     Data Engineering, Cloud, ETL, ML, Big Data, NoSQL, Pipelines, etc.)\n   - Must be concise, technical, and recruiter-friendly\n\n2. **tailored_skills (array)**\n   - Include ONLY skills the candidate actually has\n   - Prioritize skills matching the job’s tech stack\n   - Use ATS-optimized phrasing (e.g., “Python · SQL · Spark · Airflow · ETL”)\n   - Exclude soft skills unless explicitly technical\n\n3. **tailored_achievements (array)**\n   - Rewrite candidate’s real projects/experience using:\n     • strong action verbs  \n     • measurable impact  \n     • Big Tech–style phrasing  \n     • alignment with job responsibilities  \n   - NO fabricated tools or responsibilities\n   - Achievements MUST come 100% from candidate’s real resume/projects\n\n---\n\n### STRICT OUTPUT FORMAT (DO NOT BREAK)\n\nReturn ONLY **one JSON array**, wrapped in one code block:\n\n```json\n[\n  {\n    \"row_number\": <job.row_number>,\n    \"tailored_summary\": \"...\",\n    \"tailored_skills\": [...],\n    \"tailored_achievements\": [...]\n  }\n]\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1360,
+        352
+      ],
+      "id": "fc57e255-400a-4106-a712-72231086aa04",
+      "name": "Basic LLM Chain - Tailor"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = [];\n\nfor (const item of items) {\n  const raw = item.json.text || \"\";\n\n  // ---------- 1. Extract JSON block inside ```json ... ``` ----------\n  const match = raw.match(/```json([\\s\\S]*?)```/i);\n\n  if (!match) {\n    output.push({\n      json: {\n        error: \"No JSON block found\",\n        raw_text_preview: raw.slice(0, 300)\n      }\n    });\n    continue;\n  }\n\n  // Raw payload inside ```json ... ```\n  let extracted = match[1];\n\n  // ---------- 2. Clean escape characters ----------\n  extracted = extracted\n    .replace(/\\\\n/g, \"\\n\")\n    .replace(/\\\\\"/g, '\"')\n    .replace(/\\\\t/g, \" \")\n    .trim();\n\n  // ---------- 3. Attempt JSON parse ----------\n  let parsed;\n\n  try {\n    parsed = JSON.parse(extracted);\n  } catch (err) {\n    output.push({\n      json: {\n        error: \"JSON parsing failed\",\n        extracted_preview: extracted.slice(0, 300),\n        message: err.message\n      }\n    });\n    continue;\n  }\n\n  // ---------- 4. Ensure parsed structure is an array ----------\n  const arr = Array.isArray(parsed) ? parsed : [parsed];\n\n  // ---------- 5. Push each job as its own output item ----------\n  for (const obj of arr) {\n    output.push({\n      json: {\n        row_number: obj.row_number ?? null,\n        tailored_summary: obj.tailored_summary ?? \"\",\n        tailored_skills: obj.tailored_skills ?? [],\n        tailored_achievements: obj.tailored_achievements ?? []\n      }\n    });\n  }\n}\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        352
+      ],
+      "id": "d512d71c-f877-46de-84c8-d0495fec063c",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a520086c-620c-4400-b6ba-705be0a91b90",
+              "name": "resume_content",
+              "value": "=Summary:\n{{ $json.tailored_summary ? $json.tailored_summary : \"Unavailable\" }}\n\nSkills:\n{{ Array.isArray($json.tailored_skills)\n    ? $json.tailored_skills.join(\", \")\n    : \"Unavailable\"\n}}\n\nAchievements:\n{{\nArray.isArray($json.tailored_achievements)\n    ? $json.tailored_achievements\n        .map(a =>\n            typeof a === \"string\"\n                ? a\n                : (a.description || a.name || JSON.stringify(a))\n        )\n        .map(x => \"• \" + x)\n        .join(\"\\n\\n\")\n    : \"Unavailable\"\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "bc5cdc0b-1395-4f66-a7cd-1ef977e2b7c5",
+              "name": "row_number_for_update",
+              "value": "={{ $json.row_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1888,
+        352
+      ],
+      "id": "14cd62eb-c34a-4699-8a76-f7fb496d9f68",
+      "name": "TailoredResumeContent"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number_for_update }}",
+            "RESUME_CONTENT": "={{ $json.resume_content }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "JOB_ID",
+              "displayName": "JOB_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "JOB_URL",
+              "displayName": "JOB_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COMPANY",
+              "displayName": "COMPANY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_TITLE",
+              "displayName": "RAW_JOB_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_DESCRIPTION",
+              "displayName": "RAW_JOB_DESCRIPTION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATE_ADDED",
+              "displayName": "DATE_ADDED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PARSED_TITLE",
+              "displayName": "PARSED_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LOCATION",
+              "displayName": "LOCATION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WORK_TYPE",
+              "displayName": "WORK_TYPE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SENIORITY",
+              "displayName": "SENIORITY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROLE_CATEGORY",
+              "displayName": "ROLE_CATEGORY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TECH_STACK",
+              "displayName": "TECH_STACK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "KEY_SKILLS",
+              "displayName": "KEY_SKILLS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "MATCH_SCORE",
+              "displayName": "MATCH_SCORE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STRATERGY_VERSION",
+              "displayName": "STRATERGY_VERSION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TAILORING_COMPLETE",
+              "displayName": "TAILORING_COMPLETE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RESUME_CONTENT",
+              "displayName": "RESUME_CONTENT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "COVER_LETTER_FILE",
+              "displayName": "COVER_LETTER_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LAST_UPDATED",
+              "displayName": "LAST_UPDATED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "NOTES",
+              "displayName": "NOTES",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PROCESSED",
+              "displayName": "PROCESSED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2096,
+        352
+      ],
+      "id": "fd934cae-9e34-4f08-b6a3-2227737a56cc",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KyFlBXtwlJnLhmqZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        880
+      ],
+      "id": "de7b78fd-a7e5-491a-a42a-14ec73276b5e",
+      "name": "Groq Chat Model3",
+      "credentials": {
+        "groqApi": {
+          "id": "nvtbKXrl5YK4WxMm",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert cover letter writer specializing in ATS-optimized,\nearly-career data roles (Data Engineering, Analytics, BI, ML, Cloud).\n\nYou receive structured data:\n\nJOB DATA:\n{{ JSON.stringify($json.job, null, 2) }}\n\nCANDIDATE RESUME:\n{{ JSON.stringify($json.resume, null, 2) }}\n\n---\n\n### Requirements for the cover letter\n• 180–250 words  \n• Professional, confident, early-career technical tone  \n• ATS-friendly  \n• Use job-specific keywords  \n• No fluff  \n• No fabricated experience  \n• Only skills actually in the resume  \n• Explain impact using measurable achievements based on real projects  \n\n---\n\n### Structure\n1. Strong opening paragraph mentioning job + company  \n2. Technical alignment paragraph (Python, SQL, Spark, Data Platforms, Cloud, ADF, Snowflake, Databricks, etc.)  \n3. Achievement paragraph drawn from resume projects  \n4. Strong closing\n\n---\n\n### STRICT OUTPUT FORMAT\nReturn ONLY:\n\n```json\n{\n  \"row_number\": {{ $json.job.row_number }},\n  \"cover_letter\": \"<full cover letter text here>\"\n}\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1280,
+        688
+      ],
+      "id": "737a617b-01bc-45e7-b301-a7f2b3ea996c",
+      "name": "Basic LLM Chain - CoverLetter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = [];\n\nfor (const item of items) {\n  const raw = item.json.text || \"\";\n\n  // 1) Get row_number: \"row_number\": 2\n  const rowMatch = raw.match(/\"row_number\"\\s*:\\s*(\\d+)/);\n  const row_number = rowMatch ? parseInt(rowMatch[1], 10) : null;\n\n  // 2) Get cover_letter block between the first \" after cover_letter and the last closing quote\n  // Pattern: \"cover_letter\": \" .... \"\n  const coverMatch = raw.match(/\"cover_letter\"\\s*:\\s*\"([\\s\\S]*)\"\\s*\\}$/m);\n  const cover_letter = coverMatch ? coverMatch[1] : \"\";\n\n  result.push({\n    json: {\n      row_number,\n      cover_letter\n    }\n  });\n}\n\nreturn result;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        688
+      ],
+      "id": "3c304f79-83e7-4bb0-9336-e9f7b6b4b6c3",
+      "name": "Code in JavaScript-ParseJSON"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0bd21243-ecb1-4210-86ee-0da4d4c6ca52",
+              "name": "row_number_for_cover",
+              "value": "={{ $json.row_number }}",
+              "type": "string"
+            },
+            {
+              "id": "c6c8fb87-1808-4132-9980-5292a176463c",
+              "name": "cover_letter_content",
+              "value": "={{ $json.cover_letter }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1840,
+        688
+      ],
+      "id": "6bb6a8bf-5d41-47be-9e43-bc0cddc86980",
+      "name": "SetCoverLetterFields"
+    },
+    {
+      "parameters": {
+        "name": "=CoverLetter_{{$json.row_number_for_cover}}.txt",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1mCAvrd5HjiC6WcfBJAcP6W5h9Vmxtn9a",
+          "mode": "list",
+          "cachedResultName": "CoverLetters",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1mCAvrd5HjiC6WcfBJAcP6W5h9Vmxtn9a"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2272,
+        688
+      ],
+      "id": "6931dfd7-0650-4147-9029-571533f6709a",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "AcqMD7fFn5zSSULf",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const row = item.json.row_number_for_cover;\n  const text = item.json.cover_letter_content || \"\";\n\n  const fileName = `CoverLetter_${row}.txt`;\n\n  // Create text file as binary buffer\n  const buffer = Buffer.from(text, \"utf8\");\n\n  return {\n    json: {\n      row_number_for_cover: row,\n      file_name: fileName\n    },\n    binary: {\n      data: {\n        data: buffer,\n        mimeType: \"text/plain\",\n        fileName\n      }\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        688
+      ],
+      "id": "9c1268ca-b923-4c82-8904-e08030198127",
+      "name": "Code in JavaScript-PDF"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e094c7ec-77bc-4a7a-831b-35601b65a7c4",
+              "name": "cover_letter_file",
+              "value": "={{$json.webViewLink}}",
+              "type": "string"
+            },
+            {
+              "id": "3d62df23-4b88-4717-8144-b3d4b64242e4",
+              "name": "num",
+              "value": "={{\n  ($json.name.replace(/\\s+/g, \"\").match(/CoverLetter_(\\d+)\\.txt/) || [\"\", \"\"])[1]\n}}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        688
+      ],
+      "id": "db31ed9e-80a2-41ba-bce9-390ecdbe8ab4",
+      "name": "Update sheet with file link"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww",
+          "mode": "list",
+          "cachedResultName": "Internship_Search_Hub",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dVynk6Q_XI-S8Teh5oxcbTNaLrgQPawo2XdFHlV3Vww/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.num }}",
+            "COVER_LETTER_FILE": "={{ $json.cover_letter_file }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "JOB_ID",
+              "displayName": "JOB_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "JOB_URL",
+              "displayName": "JOB_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COMPANY",
+              "displayName": "COMPANY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_TITLE",
+              "displayName": "RAW_JOB_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAW_JOB_DESCRIPTION",
+              "displayName": "RAW_JOB_DESCRIPTION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATE_ADDED",
+              "displayName": "DATE_ADDED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PARSED_TITLE",
+              "displayName": "PARSED_TITLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LOCATION",
+              "displayName": "LOCATION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WORK_TYPE",
+              "displayName": "WORK_TYPE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SENIORITY",
+              "displayName": "SENIORITY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROLE_CATEGORY",
+              "displayName": "ROLE_CATEGORY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TECH_STACK",
+              "displayName": "TECH_STACK",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "KEY_SKILLS",
+              "displayName": "KEY_SKILLS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "MATCH_SCORE",
+              "displayName": "MATCH_SCORE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STRATERGY_VERSION",
+              "displayName": "STRATERGY_VERSION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TAILORING_COMPLETE",
+              "displayName": "TAILORING_COMPLETE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RESUME_CONTENT",
+              "displayName": "RESUME_CONTENT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "COVER_LETTER_FILE",
+              "displayName": "COVER_LETTER_FILE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LAST_UPDATED",
+              "displayName": "LAST_UPDATED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "NOTES",
+              "displayName": "NOTES",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "PROCESSED",
+              "displayName": "PROCESSED",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2688,
+        688
+      ],
+      "id": "2e2252cb-c833-4776-8a15-2aab5cc5909d",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KyFlBXtwlJnLhmqZ",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Trigger on new row added": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Resume From Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Jobs": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain - Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain - Job",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update rowswith parsed data": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Resume From Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract Resume data to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Resume data to JSON": {
+      "main": [
+        [
+          {
+            "node": "ResumeText",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ResumeText": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain - Resume",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain - Resume",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match Score": {
+      "main": [
+        [
+          {
+            "node": "Update rowswith parsed data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resume_in_JSON": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "NewMatchScore",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Tailoring Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NewMatchScore": {
+      "main": [
+        [
+          {
+            "node": "UpdateMatchScore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateMatchScore": {
+      "main": [
+        []
+      ]
+    },
+    "Prepare Tailoring Items": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain - Tailor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Basic LLM Chain - CoverLetter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain - Tailor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain - Job": {
+      "main": [
+        [
+          {
+            "node": "Match Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain - Resume": {
+      "main": [
+        [
+          {
+            "node": "Resume_in_JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain - Tailor": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "TailoredResumeContent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TailoredResumeContent": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain - CoverLetter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain - CoverLetter": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript-ParseJSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript-ParseJSON": {
+      "main": [
+        [
+          {
+            "node": "SetCoverLetterFields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetCoverLetterFields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript-PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript-PDF": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Update sheet with file link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update sheet with file link": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ae460eec-9462-4628-885a-778110a64d85",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a97df2fbdc39728137e9ba43b162bdea02a9029d551fa0b6b03e92da1d650ab6"
+  },
+  "id": "YT21ZsKOuDIDX09f",
+  "tags": []
+}
